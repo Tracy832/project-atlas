@@ -1,6 +1,6 @@
 "use client";
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/landing/Hero';
+import Navbar from '@/components/common/Navbar';
+import Hero from '@/components/b2c/landing/Hero';
 
 export default function LandingPage() {
   return (
