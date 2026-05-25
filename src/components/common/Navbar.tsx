@@ -1,33 +1,55 @@
 "use client";
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  // Helper function to make active links look sharp and bold
+  const linkStyle = (path: string) => {
+    const isMainHome = path === '/' && pathname === '/';
+    const isSubPage = path !== '/' && pathname.startsWith(path);
+    
+    return `transition font-semibold py-2 px-1 border-b-2 ${
+      isMainHome || isSubPage 
+        ? 'text-blue-400 border-blue-400 font-bold' 
+        : 'text-white border-transparent hover:text-blue-300'
+    }`;
+  };
+
   return (
-    <nav className="absolute top-0 w-full z-[100] flex items-center justify-between px-10 py-6 text-white bg-transparent">
-      {/* Brand Logo - Links back to Home */}
-      <Link href="/" className="text-2xl font-bold tracking-tighter hover:opacity-80 transition">
+    <nav className="fixed top-0 left-0 w-full z-[100] bg-neutral-950/80 backdrop-blur-md border-b border-white/10 px-6 md:px-12 py-4 flex items-center justify-between text-white">
+      
+      {/* Brand Logo */}
+      <Link href="/" className="text-2xl font-black tracking-tighter hover:opacity-80 transition">
         Project Atlas
       </Link>
       
-      {/* Navigation Links */}
-      <div className="hidden md:flex items-center space-x-8 font-medium">
-        <Link href="#" className="hover:text-blue-400 transition">Rent a Car</Link>
-        <Link href="#" className="hover:text-blue-400 transition">Book a Flight</Link>
-        <Link href="#" className="hover:text-blue-400 transition">Book a Transfer</Link>
+      {/* Dynamic Navigation Links */}
+      <div className="hidden md:flex items-center space-x-8 text-sm uppercase tracking-wider">
+        <Link href="/rent-a-car" className={linkStyle('/rent-a-car')}>
+          Rent a Car
+        </Link>
+        <Link href="/book-a-flight" className={linkStyle('/book-a-flight')}>
+          Book a Flight
+        </Link>
+        <Link href="/book-a-transfer" className={linkStyle('/book-a-transfer')}>
+          Book a Transfer
+        </Link>
       </div>
 
-      {/* Auth Buttons - These point to your new folders */}
+      {/* Authentication Group */}
       <div className="flex items-center space-x-6">
         <Link 
           href="/login" 
-          className="hover:text-blue-400 transition font-semibold"
+          className="hover:text-blue-300 transition font-bold text-sm tracking-wide"
         >
           Log in
         </Link>
         <Link 
           href="/signup" 
-          className="bg-white text-black px-8 py-2.5 rounded-full font-bold hover:bg-gray-200 transition active:scale-95"
+          className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-black text-sm tracking-wide hover:bg-blue-700 transition active:scale-95 shadow-md shadow-blue-900/20"
         >
           Sign up
         </Link>
