@@ -2,12 +2,6 @@
 
 import React, { useState } from 'react';
 
-const FLIGHT_CATALOG = [
-  { id: 1, name: "Nairobi (NBO) to Mombasa (MBA)", operator: "Jambojet", price: "KES 7,500", type: "One-way / Economy", image: "✈️" },
-  { id: 2, name: "Nairobi (NBO) to Kisumu (KIS)", operator: "Kenya Airways", price: "KES 9,200", type: "One-way / Economy", image: "🛩️" },
-  { id: 3, name: "Nairobi (NBO) to Eldoret (EDL)", operator: "Fly540", price: "KES 6,800", type: "One-way / Economy", image: "🛫" },
-];
-
 export default function BookAFlightPage() {
   const [formData, setFormData] = useState({
     departure: '',
@@ -18,17 +12,22 @@ export default function BookAFlightPage() {
     cabinClass: 'Economy'
   });
 
+  const [hasSearched, setHasSearched] = useState(false);
+
   const handleFlightSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching available flights:", formData);
+    setHasSearched(true);
+    
+    // Core Logic Action: This is where your API request will happen!
+    alert(`Searching for flights from ${formData.departure} to ${formData.destination}...`);
+    console.log("Submitted Flight Search Parameters:", formData);
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900">
-      <div className="bg-neutral-900 h-24 w-full" />
-      
+    <main className="min-h-screen bg-gray-50 text-gray-900 pt-24">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* SECTION 1: SEARCH PARAMETERS BOX */}
+        
+        {/* FLIGHT SEARCH PARAMETERS BOX */}
         <section className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-12">
           <h1 className="text-3xl font-extrabold text-gray-900 mb-6 tracking-tight">
             Book Domestic & International Flights
@@ -111,30 +110,20 @@ export default function BookAFlightPage() {
           </form>
         </section>
 
-        {/* SECTION 2: CONSTANT FLIGHT CATALOG */}
-        <section>
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-6 tracking-tight">Popular Domestic Routes</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FLIGHT_CATALOG.map((flight) => (
-              <div key={flight.id} className="bg-white rounded-xl shadow-md border border-gray-100 p-6 flex flex-col justify-between">
-                <div>
-                  <div className="text-4xl mb-4">{flight.image}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{flight.name}</h3>
-                  <p className="text-sm text-gray-500 font-bold mb-4 text-blue-600">{flight.operator}</p>
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                  <div>
-                    <p className="text-xs text-gray-400 uppercase font-bold tracking-wider">{flight.type}</p>
-                    <p className="text-lg font-black text-gray-900">{flight.price}</p>
-                  </div>
-                  <button className="bg-gray-900 text-white font-bold px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
-                    Book Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* DYNAMIC SEARCH RESULTS HOLDER */}
+        <section className="mt-8 text-center py-12 border-2 border-dashed border-gray-200 rounded-2xl bg-white">
+          {!hasSearched ? (
+            <div className="text-gray-400">
+              <span className="text-4xl block mb-2">🔍</span>
+              <p className="font-medium text-lg">Enter details above to search available flights dynamically.</p>
+            </div>
+          ) : (
+            <div className="text-blue-600 animate-pulse font-bold text-lg">
+              Connecting to airline schedules... Fetching flight entries for {formData.departure} ➔ {formData.destination}.
+            </div>
+          )}
         </section>
+
       </div>
     </main>
   );
