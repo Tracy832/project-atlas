@@ -58,11 +58,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Car className="w-5 h-5" />
                 <span>Fleet Management</span>
               </Link>
-              <Link href="#" className={navItemStyle('/dispatch')}>
+              <Link href="/dispatch" className={navItemStyle('/dispatch')}>
                 <CalendarClock className="w-5 h-5" />
                 <span>Dispatch Calendar</span>
               </Link>
-              <Link href="#" className={navItemStyle('/flights')}>
+              <Link href="/flights" className={navItemStyle('/flights')}>
                 <PlaneTakeoff className="w-5 h-5" />
                 <span>Flight Management</span>
               </Link>
@@ -71,11 +71,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* CORPORATE RECORDS BLOCK */}
             <div className="space-y-1">
               <p className="text-[11px] font-black tracking-wider text-gray-400 dark:text-gray-500 uppercase px-4 mb-2">Management</p>
-              <Link href="#" className={navItemStyle('/customers')}>
+              <Link href="#" className={navItemStyle('/customers')} onClick={(e) => e.preventDefault()}>
                 <Users className="w-5 h-5" />
                 <span>Customer Accounts</span>
               </Link>
-              <Link href="#" className={navItemStyle('/billing')}>
+              <Link href="#" className={navItemStyle('/billing')} onClick={(e) => e.preventDefault()}>
                 <Receipt className="w-5 h-5" />
                 <span>Billing & Payments</span>
               </Link>
