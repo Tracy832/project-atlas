@@ -1,15 +1,5 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar";
-import { ThemeProvider } from "@/context/ThemeContext"; // Import Provider
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Project Atlas",
-  description: "Book car hire, transfers, and flights seamlessly across Kenya.",
-};
+import { ThemeProvider } from "@/context/ThemeContext";
 
 export default function RootLayout({
   children,
@@ -17,10 +7,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen relative`}>
+    <html lang="en" className="transition-colors duration-200">
+      <body className="min-h-screen antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
         <ThemeProvider>
-          <Navbar />
+          {/* We only wrap the application logic here. No Navbars or structural UI allowed! */}
           {children}
         </ThemeProvider>
       </body>
