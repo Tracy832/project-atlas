@@ -10,11 +10,13 @@ export default function CustomerLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* The navbar is now trapped here, so it only shows up on customer pages! */}
+      {/* 1. Renders the main customer navigation menu at the top */}
       <Navbar />
-      <div className="flex-1">
+      
+      {/* 2. Renders your landing page or active route content directly underneath */}
+      <main className="flex-1">
         {children}
-      </div>
+      </main>
     </div>
   );
 }
