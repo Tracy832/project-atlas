@@ -9,12 +9,12 @@ export default function CustomerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* 1. Renders the main customer navigation menu at the top */}
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950">
+      {/* Dynamic top global customer navigation */}
       <Navbar />
       
-      {/* 2. Renders your landing page or active route content directly underneath */}
-      <main className="flex-1">
+      {/* Added pt-20 to cleanly clear fixed navbar height overlay limits */}
+      <main className="flex-1 pt-20">
         {children}
       </main>
     </div>

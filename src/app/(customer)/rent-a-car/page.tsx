@@ -1,214 +1,91 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Fuel, Gauge, Shield, ArrowRight, MapPin, Calendar, Clock, Search } from 'lucide-react';
 
-// Up-to-date catalog utilizing high-quality vehicle images via Unsplash strings
-const CAR_CATALOG = [
-  {
-    id: 1,
-    name: "BMW 5 Series",
-    type: "Premium Sedan",
-    seats: 5,
-    fuel: "Diesel",
-    transmission: "Auto",
-    price: "KES 12,500",
-    oldPrice: "KES 15,000",
-    tag: "Automatic",
-    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600"
-  },
-  {
-    id: 2,
-    name: "Mercedes AMG GT",
-    type: "Executive Coupe",
-    seats: 2,
-    fuel: "Petrol",
-    transmission: "Auto",
-    price: "KES 22,000",
-    oldPrice: "KES 26,500",
-    tag: "Automatic",
-    image: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=600"
-  },
-  {
-    id: 3,
-    name: "Toyota Prado TX",
-    type: "Premium 4x4",
-    seats: 7,
-    fuel: "Diesel",
-    transmission: "Auto",
-    price: "KES 15,000",
-    oldPrice: "KES 18,000",
-    tag: "4x4 Drive",
-    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=600"
-  }
-];
+function CarCatalogContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-export default function RentACarPage() {
-  const [formData, setFormData] = useState({
-    pickupLocation: '',
-    dropoffLocation: '',
-    pickupDate: '',
-    pickupTime: '',
-    dropoffDate: '',
-    dropoffTime: ''
-  });
+  const [location, setLocation] = useState('');
+  const [destination, setDestination] = useState('');
+  const [pickupDate, setPickupDate] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [returnTime, setReturnTime] = useState('');
 
-  const handleRentSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    setLocation(searchParams.get('location') || '');
+    setDestination(searchParams.get('destination') || '');
+    setPickupDate(searchParams.get('pickupDate') || '');
+    setPickupTime(searchParams.get('pickupTime') || '');
+    setReturnDate(searchParams.get('returnDate') || '');
+    setReturnTime(searchParams.get('returnTime') || '');
+  }, [searchParams]);
+
+  const carFleet = [
+    { id: 1, name: "Toyota Prado TX", class: "Premium 4x4 SUV", rate: 9500, img: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=600" },
+    { id: 2, name: "BMW 5 Series", class: "Executive Sedan", rate: 12000, img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600" },
+    { id: 3, name: "Toyota LandCruiser V8", class: "VIP Offroader", rate: 22000, img: "https://images.unsplash.com/photo-1594568284297-7c64464062b1?auto=format&fit=crop&q=80&w=600" }
+  ];
+
+  const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching available vehicles:", formData);
+    router.push(`/rent-a-car?location=${encodeURIComponent(location)}&destination=${encodeURIComponent(destination)}&pickupDate=${pickupDate}&pickupTime=${encodeURIComponent(pickupTime)}&returnDate=${returnDate}&returnTime=${encodeURIComponent(returnTime)}`);
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900 pt-24">
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        
-        {/* SECTION 1: SEARCH PARAMETERS BOX */}
-        <section className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-12">
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-6 tracking-tight">
-            Rent a Car across Kenya
-          </h1>
-          
-          <form onSubmit={handleRentSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Pick-up Location</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. JKIA, Nairobi"
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, pickupLocation: e.target.value})}
-                />
-              </div>
+    <div className="max-w-6xl mx-auto px-4 py-24 space-y-8">
+      {/* Interactive Form Panel */}
+      <form onSubmit={handleUpdate} className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-3xl grid grid-cols-1 md:grid-cols-7 gap-3 items-end">
+        <div className="md:col-span-2">
+          <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Pickup Hub</label>
+          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white" />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Return Destination</label>
+          <input type="text" value={destination} onChange={(e) => setDestination(e.target.value)} className="w-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-gray-900 dark:text-white" />
+        </div>
+        <div>
+          <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Pick Date</label>
+          <input type="date" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} className="w-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl px-2 py-2 text-xs text-gray-900 dark:text-white" />
+        </div>
+        <div>
+          <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1">Return Date</label>
+          <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} className="w-full bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-xl px-2 py-2 text-xs text-gray-900 dark:text-white" />
+        </div>
+        <button type="submit" className="w-full bg-blue-600 text-white font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1"><Search className="w-3 h-3" /> Update</button>
+      </form>
 
+      {/* Fleet Cards Matrix */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {carFleet.map(car => (
+          <div key={car.id} className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-gray-300 transition shadow-sm">
+            <div className="h-44 w-full bg-gray-100 dark:bg-gray-900">
+              <img src={car.img} alt={car.name} className="w-full h-full object-cover" />
+            </div>
+            <div className="p-5 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Drop-off Location</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. Westlands, Nairobi"
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, dropoffLocation: e.target.value})}
-                />
+                <span className="text-xs font-bold text-gray-400 uppercase block">{car.class}</span>
+                <h3 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{car.name}</h3>
               </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Pick-up Date</label>
-                <input 
-                  type="date" 
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, pickupDate: e.target.value})}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Pick-up Time</label>
-                <input 
-                  type="time" 
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, pickupTime: e.target.value})}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Drop-off Date</label>
-                <input 
-                  type="date" 
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, dropoffDate: e.target.value})}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Drop-off Time</label>
-                <input 
-                  type="time" 
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
-                  onChange={(e) => setFormData({...formData, dropoffTime: e.target.value})}
-                />
+              <div className="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-gray-900">
+                <p className="text-base font-black text-gray-900 dark:text-white">KES {car.rate.toLocaleString()}<span className="text-xs font-normal text-gray-400">/day</span></p>
+                <button onClick={() => router.push('/checkout')} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-black px-4 py-2 rounded-xl flex items-center gap-1">Book <ArrowRight className="w-3 h-3" /></button>
               </div>
             </div>
-
-            <div className="flex justify-end">
-              <button 
-                type="submit"
-                className="bg-blue-600 text-white font-bold px-12 py-4 rounded-lg hover:bg-blue-700 transition shadow-md active:scale-95 text-lg"
-              >
-                Search available cars
-              </button>
-            </div>
-          </form>
-        </section>
-
-        {/* SECTION 2: POPULAR VEHICLES CATALOG */}
-        <section>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Popular Vehicles</h2>
-            <button className="text-sm font-bold text-gray-900 hover:text-blue-600 transition flex items-center gap-1">
-              View All <span>&rarr;</span>
-            </button>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {CAR_CATALOG.map((car) => (
-              <div key={car.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group flex flex-col justify-between">
-                
-                {/* Image Section with absolute pill tag */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
-                  <img 
-                    src={car.image} 
-                    alt={car.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  />
-                  <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-sm">
-                    {car.tag}
-                  </span>
-                </div>
-                
-                {/* Specs Section */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">{car.name}</h3>
-                    
-                    {/* Feature badges exactly mimicking the UI sample */}
-                    <div className="flex items-center space-x-4 text-gray-500 font-medium text-sm mb-6">
-                      <div className="flex items-center gap-1.5">
-                        <span>👥</span> {car.seats}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>⛽</span> {car.fuel}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>⚙️</span> {car.transmission}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Pricing and Action Link Footer */}
-                  <div className="pt-4 border-t border-gray-100 flex items-end justify-between">
-                    <div>
-                      {car.oldPrice && (
-                        <p className="text-sm text-gray-400 line-through font-medium">{car.oldPrice}</p>
-                      )}
-                      <p className="text-2xl font-black text-gray-900 leading-tight">
-                        {car.price} <span className="text-xs text-gray-400 font-medium block">per day</span>
-                      </p>
-                    </div>
-                    <button className="text-gray-900 font-bold hover:text-blue-600 underline transition text-sm tracking-tight decoration-2 underline-offset-4">
-                      View Details
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-            ))}
-          </div>
-        </section>
-
+        ))}
       </div>
-    </main>
+    </div>
+  );
+}
+
+export default function RentACarPage() {
+  return (
+    <Suspense fallback={<div>Loading Fleet Infrastructure...</div>}>
+      <CarCatalogContent />
+    </Suspense>
   );
 }
