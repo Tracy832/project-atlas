@@ -71,11 +71,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* CORPORATE RECORDS BLOCK */}
             <div className="space-y-1">
               <p className="text-[11px] font-black tracking-wider text-gray-400 dark:text-gray-500 uppercase px-4 mb-2">Management</p>
-              <Link href="#" className={navItemStyle('/customers')} onClick={(e) => e.preventDefault()}>
+              
+              {/* ✅ FIXED: Points directly to /customers folder under (admin) */}
+              <Link href="/customers" className={navItemStyle('/customers')}>
                 <Users className="w-5 h-5" />
                 <span>Customer Accounts</span>
               </Link>
-              <Link href="#" className={navItemStyle('/billing')} onClick={(e) => e.preventDefault()}>
+              
+              {/* ✅ FIXED: Points directly to /billing folder under (admin) */}
+              <Link href="/billing" className={navItemStyle('/billing')}>
                 <Receipt className="w-5 h-5" />
                 <span>Billing & Payments</span>
               </Link>
